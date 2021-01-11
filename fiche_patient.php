@@ -1,4 +1,7 @@
+<?php
+/*  CODE PHP */  
 
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -8,7 +11,7 @@
     <script src="script.js"></script>
   </head>
   <body>
-
+    <h1>Fiche patient/h1>
 
 
   </body>
