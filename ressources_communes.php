@@ -2,8 +2,8 @@
 
 function getMysqlConnection(){
 try{
-    $user = "root";
-    $pass = "";
+    $user = "user1";
+    $pass = "hcetylop";
     $bdd = new PDO('mysql:host=localhost;dbname=hopital_php;charset=utf8', 'root', '');
 return $bdd;
      }
