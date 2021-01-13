@@ -1,6 +1,6 @@
 <?php
-  
     include('ressources_communes.php');
+    
     // recupere le code du patient via les parametres de l'URL (GET)
     $codePatient = $_GET["codePatient"];
   
@@ -12,17 +12,17 @@
 
     $row = $requete->fetch();
 
-    // tableau associtif qui contient les lignes pre-formatées avec les informations du patients
+    // tableau associtif qui contient les lignes avec les informations du patients
     $patientArray = array(
-      "Code" => "<td>".$row["Code"]."</td>",
-      "Nom" => "<td>".$row["Nom"]."</td>",
-      "Prenom" => "<td>".$row["Prenom"]."</td>",
-      "Sexe" => "<td>".$row["sexeLibelle"]."</td>",
-      "Date de naissance" => "<td>".$row["DateNaiss"]."</td>",
-      "Numero Securite sociale" => "<td>".$row["NumeroSecSoc"]."</td>",
-      "Pays" => "<td>".$row["paysLibelle"]."</td>",
-      "Date Premiere entree" => "<td>".$row["DatePremEntree"]."</td>",
-      "Motif de derniere visite" => "<td>".$row["motifLibelle"]."</td>"
+      "Code" => $row["Code"],
+      "Nom" => $row["Nom"],
+      "Prenom" => $row["Prenom"],
+      "Sexe" => $row["sexeLibelle"],
+      "Date de naissance" => $row["DateNaiss"],
+      "Numero Securite sociale" => $row["NumeroSecSoc"],
+      "Pays" => $row["paysLibelle"],
+      "Date Premiere entree" => $row["DatePremEntree"],
+      "Motif de derniere visite" => $row["motifLibelle"]
     );
 ?>
 
@@ -32,20 +32,21 @@
     <meta charset="utf-8">
     <title>title</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
   </head>
   <body>
-    <h1>Fiche detaille du patient</h1>
-    <table>
+    <h2 style="text-align:center">Fiche detaille du patient</h2>
+    <table style="margin:auto; margin-top:30px">
         <?php 
-        // Affichage des attributs du patient
+        // Affichage des attributs du patient 
         foreach ($patientArray as $key => $value) {
           echo "<tr><td>".$key."</td><td>".$value."</td></tr>";
          }
         ?>
     </table>
 
-    <a href="recherche_patient.php">Retour au formulaire</a>
+<div style="text-align:center; margin-top:40px">
+  <a href="recherche_patient.php">Retour au formulaire</a>
+</div>
 
   </body>
 </html>
