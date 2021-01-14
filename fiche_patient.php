@@ -44,6 +44,8 @@
         ?>
     </table>
 
+    <h2 style="text-align:center">Historique des documents</h2>
+
 <div style="text-align:center; margin-top:40px">
   <a href="recherche_patient.php">Retour au formulaire</a>
 </div>

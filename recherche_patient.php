@@ -14,8 +14,7 @@
     $requete_motif = "SELECT Code, libellé FROM motifs";
     $request_motif = getMysqlConnection()->prepare($requete_motif);
     $request_motif->execute();
-
-
+    
     while($row = $request_motif->fetch()){
       $list_motifs[$row["Code"]] =  $row["libellé"];
     }
@@ -153,7 +152,7 @@
 </style>
   </head>
   <body>
-     <h1 class="h1">Recherche des patients</h1>
+     <h1 class="h1">Recherche de patients</h1>
 
      <!-- Formulaire  -->
     <form method="POST" action="recherche_patient.php" name="vform" align="center">
@@ -206,7 +205,7 @@
 
     <!-- Affichage de la liste des patients correspondants aux criteres -->
     <h3 id="titleResultRecherche">Résultats de votre recherche : </h3>
-    <table>
+    <table style="width:100%; text-align:center">
     <?php
         // Affichage de chaque lien de patient trouve
         foreach($patientsTrouve as $link){

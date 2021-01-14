@@ -12,11 +12,13 @@ USE hopital_php;
 CREATE USER 'user1'@'localhost' IDENTIFIED BY 'hcetylop';
 GRANT ALL PRIVILEGES ON * . * TO 'user1'@'localhost';
 
-
+DROP TABLE IF EXISTS Document;
 DROP TABLE IF EXISTS Patients;
 DROP TABLE IF EXISTS Pays;
 DROP TABLE IF EXISTS Motifs;
 DROP TABLE IF EXISTS Sexe;
+DROP TABLE IF EXISTS TypeDocument;
+
 
 -- TABLE "Pays"
 CREATE TABLE Pays(
@@ -72,10 +74,41 @@ ALTER TABLE Patients ADD FOREIGN KEY (CodePays) REFERENCES Pays(Code);
 ALTER TABLE Patients ADD FOREIGN KEY (CodeMotif) REFERENCES Motifs(Code);
 ALTER TABLE Patients ADD FOREIGN KEY (Sexe) REFERENCES Sexe(Code);
 
+
 INSERT INTO Patients VALUES(1,'MAALOUL','Ali','M','1979/01/12','','TN','01/02/2018',1);
 INSERT INTO Patients VALUES(2,'DUPONT','Veronique','F','1938/12/27','238277502900442', 'FR','05/04/2018',2);
 INSERT INTO Patients VALUES(3,'DUPONT','Jean','M','1985/04/01','185045903800855','FR','12/06/2018',3);
 INSERT INTO Patients VALUES(4,'EL GUERROUJ','Hicham','M','1980/06/10','','MA','18/08/2018',1);
 INSERT INTO Patients VALUES(5,'BELMADI','Djamel','M','1982/12/27','','DZ','26/09/2018',1);
+
+
+-- Table TypeDocument
+CREATE TABLE TypeDocument(
+    idTypeDocument INT NOT NULL,
+    libelle ENUM('Ordonnance','Prescription','Carte identite') NOT NULL,
+    CONSTRAINT pk_typeDoc PRIMARY KEY(idTypeDocument)
+);
+
+INSERT INTO TypeDocument VALUES(1,'Ordonnance');
+INSERT INTO TypeDocument VALUES(2,'Prescription');
+INSERT INTO TypeDocument VALUES(3,'Carte identite');
+
+
+-- Table Document
+CREATE TABLE Document(
+    idOrdonnance INT NOT NULL,
+    idPatient INT NOT NULL,
+    typeDocument INT NOT NULL,
+    filePath VARCHAR(60),
+    urlFormat ENUM('jpg','pdf'),
+    dateCreation DATE,
+    CONSTRAINT pk_document PRIMARY KEY(idOrdonnance)
+);
+
+ALTER TABLE Document ADD FOREIGN KEY (idPatient) REFERENCES Patients(Code);
+ALTER TABLE Document ADD FOREIGN KEY (typeDocument)  REFERENCES TypeDocument(idTypeDocument);
+
+INSERT INTO Document VALUES(1,1,1,'files/ordonnances/ordDUPONTisabelle1.jpg','jpg','2021/12/03');
+
 
 
