@@ -47,7 +47,7 @@
     $patientsTrouve = array();
 
     // Si l'utilisateur a entre les valeurs des formulaires obligatoires
-    if(!empty($_POST["dateNaissance"]) && !empty($_POST['motif']) && !empty($_POST['pays'])  )
+    if(isset($_POST["submit"]))
     {
       $nomPatient= "";   // Facultatif  
       if(!empty($_POST["nom"])){
@@ -199,7 +199,7 @@
         </div>
       <div>
 
-      <input type="submit" name="envoyer" value="envoyer" class="btn">
+      <input type="submit" name="submit" value="envoyer" class="btn">
       </div>
    </form>
 

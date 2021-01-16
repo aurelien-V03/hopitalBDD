@@ -108,7 +108,15 @@ CREATE TABLE Document(
 ALTER TABLE Document ADD FOREIGN KEY (idPatient) REFERENCES Patients(Code);
 ALTER TABLE Document ADD FOREIGN KEY (typeDocument)  REFERENCES TypeDocument(idTypeDocument);
 
-INSERT INTO Document VALUES(1,1,1,'files/ordonnances/ordDUPONTisabelle1.jpg','jpg','2021/12/03');
 
+INSERT INTO Document VALUES(1,2,1,'files/ordonnances/ordonnanceDUPONTveronique1.jpg','jpg','2020-09-01');
+INSERT INTO Document VALUES(2,2,1,'files/ordonnances/ordonnanceDUPONTveronique2.jpg','jpg','2020-10-04');
+INSERT INTO Document VALUES(3,2,1,'files/ordonnances/ordonnanceDUPONTveronique3.jpg','jpg','2020-12-22');
+INSERT INTO Document VALUES(4,3,1,'files/ordonnances/ordonnanceDUPONTjean1.jpg','jpg','2019-10-01');
+
+INSERT INTO Document VALUES(5,2,1,'files/prescriptions/prescriptionDUPONTveronique.jpg','jpg','2020-12-22');
+
+INSERT INTO Document VALUES(6,2,1,'files/carteIdentites/idDUPONTveronique.jpg','jpg','2020-12-22');
+INSERT INTO Document VALUES(7,3,1,'files/carteIdentites/idDUPONTjean.jpg','jpg','2020-10-15');
 
 
