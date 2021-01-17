@@ -63,7 +63,7 @@ class Document{
             $CodePatient = strval($row["Code"]);
 
             // formatage du lien HTML <a></a>
-            $urlPatient = "fiche_patient.php?codePatient=".$CodePatient;
+            $urlPatient = "fiche_patient.php?codePatient=".$CodePatient."&nom=".$MAJnom."&prenom=".$prenom;
             $htmlPatient = "<a href='".$urlPatient  ."'>". $MAJnom." ". $prenom."</a>";
 
             array_push($patientArray, $htmlPatient);

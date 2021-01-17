@@ -46,7 +46,7 @@
     // contient les liens <a></a> des patients qui correspondent aux criteres du formulaire
     $patientsTrouve = array();
 
-    // Si l'utilisateur a entre les valeurs des formulaires obligatoires
+    // Si l'utilisateur patientsTrouvea entre les valeurs des formulaires obligatoires
     if(isset($_POST["submit"]))
     {
       $nomPatient= "";   // Facultatif  

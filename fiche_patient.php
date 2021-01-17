@@ -1,4 +1,5 @@
 <?php
+
     include('ressources_communes.php');
     
     $patientArray = array();
@@ -33,11 +34,15 @@
   }
 
  
+  //
+  //          formulaire d'upload validé
+  //
 if(isset($_POST["submit"]) && !empty($_POST["typeDocument"])) {
   // dossier ou le fichier sera enregistre
-  $target_dir = "files/".$_POST["typeDocument"]."/";
+  $target_dir = "files/".$_POST["typeDocument"]."s/";
   // chemin du fichier à upload
   $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+  // si l'upload s'est bien deroulé
   $uploadOk = 1;
   // extension du fichier à upload
   $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
@@ -47,30 +52,25 @@ if(isset($_POST["submit"]) && !empty($_POST["typeDocument"])) {
     if($check !== false) {
       echo "File is an image - " . $check["mime"] . ".";
       $uploadOk = 1;
-        
-
     } else {
       echo "File is not an image.";
       $uploadOk = 0;
     }
-
     // Check if file already exists
     if (file_exists($target_file)) {
       echo "Sorry, file already exists.";
       $uploadOk = 0;
     }
-    
     // Allow certain file formats (only png / pdf / jpg)
     if($imageFileType != "jpg" && $imageFileType != "pdf" && $imageFileType != "png" ) {
       echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
       $uploadOk = 0;
     }
-
-// Check file size > 1000 ko
-if ($_FILES["fileToUpload"]["size"] > 1000000) {
-  echo "Sorry, your file is too large.";
-  $uploadOk = 0;
-}
+    // Check file size > 1000 ko
+    if ($_FILES["fileToUpload"]["size"] > 1000000) {
+      echo "Sorry, your file is too large.";
+      $uploadOk = 0;
+    }
 
   // Check if $uploadOk is set to 0 by an error
 if ($uploadOk == 0) {
@@ -78,6 +78,26 @@ if ($uploadOk == 0) {
 // if everything is ok, try to upload file
 } else {
   if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+
+    // enregistrer l'url du document dans la base de donnee
+
+    $typeDocument;
+    if($_POST["typeDocument"] == "ordonnance")
+      $typeDocument = 1;
+    else if($_POST["typeDocument"] == "prescription")
+      $typeDocument = 2;
+    else
+      $typeDocument = 3;
+
+      
+    // Date d'upload du fichier
+    $date_creation = date("Y-m-d");  
+
+    // insertion en base de donnee
+    $requete_insert_document = "INSERT INTO Document (idPatient,typeDocument,filePath, urlFormat, dateCreation) VALUES(".$codePatient.",".$typeDocument.",'".$target_file."','".$imageFileType."','".$date_creation. "')";
+    $insertDocumentRequest = getMysqlConnection()->prepare($requete_insert_document);
+    $insertDocumentRequest->execute();
+
     echo "The file ". htmlspecialchars( basename( $_FILES["fileToUpload"]["name"])). " has been uploaded.";
   } else {
     echo "Sorry, there was an error uploading your file.";
@@ -93,37 +113,61 @@ if ($uploadOk == 0) {
     <title>title</title>
     <link rel="stylesheet" href="style.css">
     <style>
+     /* Style des tableaux */
       table{
         margin:auto;  
       }
-
       .tableInformation {
-  font-family: Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  width: auto;
-}
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: auto;
+      }
 
-.tableInformation td, .tableInformation th {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
+      .tableInformation td, .tableInformation th {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+      .tableInformation tr:nth-child(even){background-color: #f2f2f2;}
+      .tableInformation tr:hover {background-color: #ddd;}
+      .tableInformation th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #4CAF50;
+        color: white;
+      }
+      /* Style des titres */
+      h2 { color: #ff4411; font-size: 30; font-family: 'Signika', sans-serif; padding-bottom: 10px; }
+      /* Style de l'upload */
+      
+      input[type=submit] {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+      }
 
-.tableInformation tr:nth-child(even){background-color: #f2f2f2;}
+      /* style liste deroulante type document */
+      select {
+        width: 50%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #729fb9;
+        border-radius: 4px;
+        box-sizing: border-box;
+        background-color: lightblue;
+      }
 
-.tableInformation tr:hover {background-color: #ddd;}
-
-.tableInformation th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color: #4CAF50;
-  color: white;
-}
-h2 { color: #ff4411; font-size: 30; font-family: 'Signika', sans-serif; padding-bottom: 10px; }
+   
     </style>
   </head>
   <body>
-    <h2 style="text-align:center">Fiche detaillée du patient</h2>
+    <h2 style="text-align:center">Fiche detaillée de <?php echo($_GET["nom"]." ".$_GET["prenom"]) ?></h2>
     <table class="tableInformation">
         <?php 
         // Affichage des attributs du patient 
@@ -136,7 +180,6 @@ h2 { color: #ff4411; font-size: 30; font-family: 'Signika', sans-serif; padding-
       <h2 style="text-align:center">Historique des documents</h2>
         
         <table class="tableInformation">
-          
          <tbody>
             <tr><th>Nom fichier</th><th>Date creation</th><th>Type document</th></tr>
           <?php
@@ -155,19 +198,21 @@ h2 { color: #ff4411; font-size: 30; font-family: 'Signika', sans-serif; padding-
         </table>
         
         <h2 style="text-align:center">Upload document</h2>
-
+        <div style="width:40%; margin:auto">
+        <!-- Formulaire d'upload -->
         <form action="" method="post" enctype="multipart/form-data">
-        Select 
-        <input type="file" name="fileToUpload" id="fileToUpload">
-        <select name="typeDocument">
-            <option value="">Choisissez le type de document</option>
-            <option value="ordonnances">Ordonnance</option>
-            <option value="prescriptions">Prescription</option>
-            <option value="cartesIdentites">Carte identite</option>
-        </select>
-
-        <input type="submit" value="Upload Image" name="submit">
-      </form>
+          <input type="file" name="fileToUpload" class="inputfile" style="display:block">
+          
+            <select name="typeDocument" style="display:block">
+                <option value="">Choisissez le type de document</option>
+                <option value="ordonnance">ordonnance</option>
+                <option value="prescription">prescription</option>
+                <option value="cartesIdentite">carte identite</option>
+            </select>
+            <input type="submit" value="Upload Image" name="submit">
+         </form>
+        </div>
+        
 
 <div style="text-align:center; margin-top:40px">
   <a href="recherche_patient.php">Retour au formulaire</a>
