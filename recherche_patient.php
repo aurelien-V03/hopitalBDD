@@ -88,67 +88,7 @@
     <title>Hopital</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        input[type=text], select {
-        width: 50%;
-        padding: 12px 20px;
-        margin: 8px 0;
-        display: inline-block;
-        border: 1px solid #729fb9;
-        border-radius: 4px;
-        box-sizing: border-box;
-        background-color: #729fb9;
-      }
-
-    input[type=date], select {
-        width: 50%;
-        padding: 14px 20px;
-        margin: 8px 0;
-        display: inline-block;
-        border: 1px solid #729fb9;
-        border-radius: 4px;
-        box-sizing: border-box;
-        background-color: #729fb9;
-      }
-
-      input[type=number], select {
-        width: 50%;
-        padding: 14px 20px;
-        margin: 8px 0;
-        display: inline-block;
-        border: 1px solid #b88296;
-        border-radius: 4px;
-        box-sizing: border-box;
-        background-color: #ddd5d57a;
-      }
-      input[type=submit] {
-        width: 50%;
-        background-color: #1a3e47;
-        color: rgb(114, 112, 112);
-        padding: 16px 20px;
-        margin: 8px 0;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: bold;
-      }
-
-      input[type=submit]:hover {
-        background-color: #61b13b;
-      }
-      label{
-        position: absolute;
-        left: 350px;
-      }
-      .h1{
-        text-align:center;
-        top: 60px;
-        left: 347px;
-        color: #4f95a7;
-      }
-
-      #titleResultRecherche{
-        text-align:center;
-      }
+        
 </style>
   </head>
   <body>

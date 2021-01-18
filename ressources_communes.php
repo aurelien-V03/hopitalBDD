@@ -19,7 +19,7 @@ class Document{
 
     // retourne HTML formate pour une utilisation dans un tableau dans une balise <tr></tr>
     function getRowTable(){
-        $row = "<td><a href='document_affichage.php?codeDocument=".$this->id."'>".$this->getNameOfFile()."</a></td>";
+        $row = "<td><a href='document_affichage.php?urlDocument=".$this->filePath."'>".$this->getNameOfFile()."</a></td>";
         $row .= "<td>".$this->dateCreation."</td>";
         $row .= "<td>".$this->libelle."</td>";
         return $row;

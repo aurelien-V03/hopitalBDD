@@ -113,57 +113,6 @@ if ($uploadOk == 0) {
     <title>title</title>
     <link rel="stylesheet" href="style.css">
     <style>
-     /* Style des tableaux */
-      table{
-        margin:auto;  
-      }
-      .tableInformation {
-        font-family: Arial, Helvetica, sans-serif;
-        border-collapse: collapse;
-        width: auto;
-      }
-
-      .tableInformation td, .tableInformation th {
-        border: 1px solid #ddd;
-        padding: 8px;
-      }
-      .tableInformation tr:nth-child(even){background-color: #f2f2f2;}
-      .tableInformation tr:hover {background-color: #ddd;}
-      .tableInformation th {
-        padding-top: 12px;
-        padding-bottom: 12px;
-        text-align: left;
-        background-color: #4CAF50;
-        color: white;
-      }
-      /* Style des titres */
-      h2 { color: #ff4411; font-size: 30; font-family: 'Signika', sans-serif; padding-bottom: 10px; }
-      /* Style de l'upload */
-      
-      input[type=submit] {
-        background-color: #4CAF50; /* Green */
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-      }
-
-      /* style liste deroulante type document */
-      select {
-        width: 50%;
-        padding: 12px 20px;
-        margin: 8px 0;
-        display: inline-block;
-        border: 1px solid #729fb9;
-        border-radius: 4px;
-        box-sizing: border-box;
-        background-color: lightblue;
-      }
-
-   
     </style>
   </head>
   <body>
