@@ -2,35 +2,34 @@
 
     include('ressources_communes.php');
     
-    $patientArray = array();
-    $arrayDocument = array();
+    $patientArray = array();     // tableau associtif qui contient les informations du patients ( type information => valeur information)
+    $arrayDocument = array();    // tableau associatif qui contient les documents du clients ( type document => documents de ce type)
 
-    // recupere le code du patient via les parametres de l'URL (GET)
+    // recupere les informations du patients et ses documents grace au parametre $_GET
     if(!empty($_GET["codePatient"])){
-    $codePatient = $_GET["codePatient"];
+      $codePatient = $_GET["codePatient"];
   
-    // requete pour recupere les infos du patient
-    $requetePatientInfo = "SELECT p.Code, Nom, Prenom, Sexe, DateNaiss, NumeroSecSoc, CodePays, DatePremEntree, CodeMotif, m.libellé as motifLibelle, Pays.libelle as paysLibelle, s.libellé as sexeLibelle FROM patients p, motifs m, Pays, sexe s  WHERE p.Code = ".$codePatient." AND p.CodeMotif = m.Code AND Pays.Code = p.CodePays AND s.Code = p.Sexe";
+      // requete pour recupere les infos du patient
+      $requetePatientInfo = "SELECT p.Code, Nom, Prenom, Sexe, DateNaiss, NumeroSecSoc, CodePays, DatePremEntree, CodeMotif, m.libellé as motifLibelle, Pays.libelle as paysLibelle, s.libellé as sexeLibelle FROM patients p, motifs m, Pays, sexe s  WHERE p.Code = ".$codePatient." AND p.CodeMotif = m.Code AND Pays.Code = p.CodePays AND s.Code = p.Sexe";
 
-    $requete = getMysqlConnection()->prepare($requetePatientInfo);
-    $requete->execute();
+      $requete = getMysqlConnection()->prepare($requetePatientInfo);
+      $requete->execute();
 
-    $row = $requete->fetch();
+      $row = $requete->fetch();
 
-    // tableau associtif qui contient les lignes avec les informations du patients
-    $patientArray = array(
-      "Code" => $row["Code"],
-      "Nom" => $row["Nom"],
-      "Prenom" => $row["Prenom"],
-      "Sexe" => $row["sexeLibelle"],
-      "Date de naissance" => $row["DateNaiss"],
-      "Numero Securite sociale" => $row["NumeroSecSoc"],
-      "Pays" => $row["paysLibelle"],
-      "Date Premiere entree" => $row["DatePremEntree"],
-      "Motif de derniere visite" => $row["motifLibelle"]
-    );
+      $patientArray = array(
+        "Code" => $row["Code"],
+        "Nom" => $row["Nom"],
+        "Prenom" => $row["Prenom"],
+        "Sexe" => $row["sexeLibelle"],
+        "Date de naissance" => $row["DateNaiss"],
+        "Numero Securite sociale" => $row["NumeroSecSoc"],
+        "Pays" => $row["paysLibelle"],
+        "Date Premiere entree" => $row["DatePremEntree"],
+        "Motif de derniere visite" => $row["motifLibelle"]
+      );
 
-    $arrayDocument =  getPatientDocuments($codePatient);
+      $arrayDocument =  getPatientDocuments($codePatient);
   }
 
  
@@ -38,6 +37,7 @@
   //          formulaire d'upload validé
   //
 if(isset($_POST["submit"]) && !empty($_POST["typeDocument"])) {
+  
   // dossier ou le fichier sera enregistre
   $target_dir = "files/".$_POST["typeDocument"]."s/";
   // chemin du fichier à upload
@@ -73,14 +73,14 @@ if(isset($_POST["submit"]) && !empty($_POST["typeDocument"])) {
     }
 
   // Check if $uploadOk is set to 0 by an error
-if ($uploadOk == 0) {
-  echo "Sorry, your file was not uploaded.";
-// if everything is ok, try to upload file
-} else {
+  if ($uploadOk == 0) {
+    echo "Sorry, your file was not uploaded.";
+  // if everything is ok, try to upload file
+  } 
+  else {
   if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
 
-    // enregistrer l'url du document dans la base de donnee
-
+    // enregistrer l'url du document dans la base de donnee après que celui-ci a ete enregistré en local
     $typeDocument;
     if($_POST["typeDocument"] == "ordonnance")
       $typeDocument = 1;
@@ -89,8 +89,7 @@ if ($uploadOk == 0) {
     else
       $typeDocument = 3;
 
-      
-    // Date d'upload du fichier
+    // Date d'upload du fichier au format yyyy-mm-dd
     $date_creation = date("Y-m-d");  
 
     // insertion en base de donnee
@@ -116,18 +115,25 @@ if ($uploadOk == 0) {
     </style>
   </head>
   <body>
-    <h2 style="text-align:center">Fiche detaillée de <?php echo($_GET["nom"]." ".$_GET["prenom"]) ?></h2>
+
+    <!-- Titre -->
+    <h2 style="text-align:center">Fiche detaillée de <?php
+      $nom = !empty($_GET["nom"]) ? $_GET["nom"] : "";
+      $prenom = !empty($_GET["prenom"]) ? $_GET["prenom"] : "";
+      echo($nom." ".$prenom) ?>
+    </h2>
+
+    <!-- Affichage des informations du patient -->
     <table class="tableInformation">
         <?php 
-        // Affichage des attributs du patient 
         foreach ($patientArray as $key => $value) {
           echo "<tr><td>".$key."</td><td>".$value."</td></tr>";
          }
         ?>
     </table>
 
+      <!-- Affichage des documents du patient -->
       <h2 style="text-align:center">Historique des documents</h2>
-        
         <table class="tableInformation">
          <tbody>
             <tr><th>Nom fichier</th><th>Date creation</th><th>Type document</th></tr>
@@ -145,13 +151,12 @@ if ($uploadOk == 0) {
           ?>
          </tbody>
         </table>
-        
+
+        <!-- Formulaire d'upload -->
         <h2 style="text-align:center">Upload document</h2>
         <div style="width:40%; margin:auto">
-        <!-- Formulaire d'upload -->
         <form action="" method="post" enctype="multipart/form-data">
           <input type="file" name="fileToUpload" class="inputfile" style="display:block">
-          
             <select name="typeDocument" style="display:block">
                 <option value="">Choisissez le type de document</option>
                 <option value="ordonnance">ordonnance</option>
@@ -162,10 +167,10 @@ if ($uploadOk == 0) {
          </form>
         </div>
         
-
-<div style="text-align:center; margin-top:40px">
-  <a href="recherche_patient.php">Retour au formulaire</a>
-</div>
+    <!-- Bouton retour -->
+    <div style="text-align:center; margin-top:40px">
+      <a href="recherche_patient.php">Retour au formulaire</a>
+    </div>
 
   </body>
 </html>

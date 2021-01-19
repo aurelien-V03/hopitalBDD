@@ -96,13 +96,13 @@ INSERT INTO TypeDocument VALUES(3,'Carte identite');
 
 -- Table Document
 CREATE TABLE Document(
-    idOrdonnance INT AUTO_INCREMENT,
+    idDocument INT AUTO_INCREMENT,
     idPatient INT NOT NULL,
     typeDocument INT NOT NULL,
     filePath VARCHAR(60),
     urlFormat ENUM('jpg','pdf','png '),
     dateCreation DATE,
-    CONSTRAINT pk_document PRIMARY KEY(idOrdonnance)
+    CONSTRAINT pk_document PRIMARY KEY(idDocument)
 );
 
 ALTER TABLE Document ADD FOREIGN KEY (idPatient) REFERENCES Patients(Code);

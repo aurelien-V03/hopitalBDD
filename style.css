@@ -56,11 +56,6 @@ input[type=date], select {
     color: #4f95a7;
   }
 
-  #titleResultRecherche{
-    text-align:center;
-  }
-
-
 
 
    /* Style des tableaux */
@@ -103,7 +98,7 @@ input[type=date], select {
 
   /* style liste deroulante type document */
   select {
-    width: 50%;
+    width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
@@ -112,16 +107,19 @@ input[type=date], select {
     box-sizing: border-box;
     background-color: lightblue;
   }
-#formEmail input[type=text], input[type=submit]{
-    width:100%;
-}
+
 #formEmail input[type=text]{
     background-color: white;
 
 }
 
+/*css pour affichage document*/
 #formEmail{
     margin:auto;
     text-align: center;
-    width:40%;
+    width:100%;
+}
+
+#inputTextEmail{
+  width:100%;
 }

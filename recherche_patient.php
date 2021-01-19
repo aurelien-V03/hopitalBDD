@@ -31,7 +31,7 @@
     }
 
     /* Liste des annees pour le formulaires des dates d'anniverssaires de 1930 a 2021*/
-    $list_year = array("Indiferent");
+    $list_year = array("Indifferent");
     for($i = 2021 ; $i >= 1900 ; $i--){
         array_push($list_year, $i);
     }
@@ -53,7 +53,6 @@
       if(!empty($_POST["nom"])){
         $nomPatient = strtoupper($_POST["nom"]);
       }
-
       $motifAdmission = $_POST["motif"]; 
       $pays = $_POST["pays"];
       $anneeDateNaissance = $_POST["dateNaissance"];
@@ -62,19 +61,29 @@
       $dateNaisseMin = $anneeDateNaissance. "/01/01";
       $dateNaissMax = $anneeDateNaissance . "/12/31";
 
-      // recherche des patients par prenom
-      if(strlen($nomPatient) > 0){
-        $requete = "SELECT Code, Nom, Prenom, Sexe, DateNaiss, NumeroSecSoc, CodePays, DatePremEntree, CodeMotif FROM patients WHERE Nom = '". $nomPatient."'
-        AND CodeMotif = " . $motifAdmission . " AND CodePays = '". $pays . "' AND DateNaiss BETWEEN '". $dateNaisseMin. "' AND '". $dateNaissMax."'";
-        
-        $patientsTrouve = createPatientArray($requete);
+      // tableau qui contient tous les filtres a appliquer dans la requete SQL
+      $requete_filter = array();
+      // corps de base de la requete
+      $requete = "SELECT Code, Nom, Prenom, Sexe, DateNaiss, NumeroSecSoc, CodePays, DatePremEntree, CodeMotif FROM patients";
+      if(strlen($_POST["nom"]) > 0)
+        array_push($requete_filter, "Nom = '". $nomPatient."'");
+      if($_POST["motif"] != "Indifferent")
+         array_push($requete_filter, "CodeMotif = " . $motifAdmission);
+      if($_POST["pays"] != "Indifferent")
+         array_push($requete_filter, "CodePays = '". $pays."'" );
+      if($_POST["dateNaissance"] != "Indifferent")
+         array_push($requete_filter, "DateNaiss BETWEEN '". $dateNaisseMin. "' AND '". $dateNaissMax."'");
+
+      // concatene les contraintes
+      for($i = 0 ; $i < count($requete_filter) ; $i++){
+        if($i ==0)
+          $requete .=  " WHERE ".$requete_filter[$i];
+        else
+        $requete .=  " AND ".$requete_filter[$i];
       }
-      // On recherche sans le nom du patient
-      else{
-        $requete = "SELECT Code, Nom, Prenom, Sexe, DateNaiss, NumeroSecSoc, CodePays, DatePremEntree, CodeMotif FROM patients WHERE CodeMotif = " . $motifAdmission . " AND CodePays = '". $pays . "' AND DateNaiss BETWEEN '". $dateNaisseMin. "' AND '". $dateNaissMax."'"   ;
-       
-        $patientsTrouve = createPatientArray($requete);
-      }  
+
+      // recupere la liste des patients correspondants aux criteres
+      $patientsTrouve = createPatientArray($requete);
     }
     else {
       $errorSubmit = true;
@@ -88,8 +97,19 @@
     <title>Hopital</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        
-</style>
+        #divcodemotif, #divcodepays, #datenaissance{
+          width:50%;
+          margin:auto;
+        }
+        /* liens des patients trouves */
+        a{
+          text-decoration:none;
+        }
+        #titleResultRecherche{
+          text-align:center;
+        }
+
+  </style>
   </head>
   <body>
      <h1 class="h1">Recherche de patients</h1>
@@ -102,7 +122,7 @@
         <input type="text" name="nom" class="textInput" placeholder="Indifférent">
       </div>
 
-      <div id="code-motif">
+      <div id="divcodemotif">
         <label>Motif</label> <br>
         <select name="motif" id="code-motif">
           <?php  
@@ -114,7 +134,7 @@
         </select>
       </div>
     
-      <div id="code-pays">
+      <div id="divcodepays">
         <label for="pays">Pays</label> <br>
           <select name="pays" id="pays" placeholder="Indifférent">
             <?php 
@@ -138,21 +158,22 @@
           </select>
         </div>
       <div>
-
       <input type="submit" name="submit" value="envoyer" class="btn">
       </div>
    </form>
 
-    <!-- Affichage de la liste des patients correspondants aux criteres -->
-    <h3 id="titleResultRecherche">Résultats de votre recherche : </h3>
-    <table style="width:100%; text-align:center">
+    <!-- Affichage de la liste des patients correspondants aux criteres quand formulaire validé -->
     <?php
-        // Affichage de chaque lien de patient trouve
-        foreach($patientsTrouve as $link){
-          $row =  "<tr><td>". $link ."</td></tr>"; 
-          echo $row;
+        $table_patients = '<h2 id="titleResultRecherche">Résultats de votre recherche : </h2>';
+        $table_patients .=  '<table style="width:100%; text-align:center">';
+         // Affichage de chaque lien de patient trouve
+         foreach($patientsTrouve as $link){
+          $table_patients .=  "<tr><td>". $link ."</td></tr>"; 
         }
+        $table_patients .= "</table>";
+
+        if(!empty($_POST["submit"]))
+           echo $table_patients;
     ?>
-    </table>
   </body>
 </html>

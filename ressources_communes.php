@@ -73,7 +73,7 @@ class Document{
 
 
 
-    // prend en parametre l'id du patient et lui revoie un tableau contenant 1 tableau pour chaque type de document
+    // prend en parametre l'id du patient et lui revoie un tableau contenant 1 tableau pour chaque type de document (ordonnance, prescription, cartes identites)
     function getPatientDocuments($patientId){
         $array_document = array(
             "Ordonnance" => array(),
@@ -81,7 +81,7 @@ class Document{
             "Carte identite" => array()
         );
 
-        $requete = "SELECT idOrdonnance, idPatient, typeDocument, filePath, urlFormat, dateCreation, td.libelle FROM document d, typeDocument td WHERE d.typeDocument = td.idTypeDocument AND idPatient = " .$patientId;
+        $requete = "SELECT idDocument, idPatient, typeDocument, filePath, urlFormat, dateCreation, td.libelle FROM document d, typeDocument td WHERE d.typeDocument = td.idTypeDocument AND idPatient = " .$patientId;
 
         $requestDocuments = getMysqlConnection()->prepare($requete);
         $requestDocuments->execute();
@@ -89,7 +89,7 @@ class Document{
      
         while($row = $requestDocuments->fetch())
         {
-            $documentOfPatient = new Document($row["idOrdonnance"],$row["filePath"],$row["urlFormat"],$row["dateCreation"],$row["libelle"]);
+            $documentOfPatient = new Document($row["idDocument"],$row["filePath"],$row["urlFormat"],$row["dateCreation"],$row["libelle"]);
 
 
            $typeDocument = intval($row["typeDocument"]);
