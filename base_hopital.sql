@@ -114,9 +114,9 @@ INSERT INTO Document (idPatient,typeDocument,filePath, urlFormat, dateCreation) 
 INSERT INTO Document (idPatient,typeDocument,filePath, urlFormat, dateCreation) VALUES(2,1,'files/ordonnances/ordonnanceDUPONTveronique3.jpg','jpg','2020-12-22');
 INSERT INTO Document (idPatient,typeDocument,filePath, urlFormat, dateCreation) VALUES(3,1,'files/ordonnances/ordonnanceDUPONTjean1.jpg','jpg','2019-10-01');
 
-INSERT INTO Document (idPatient,typeDocument,filePath, urlFormat, dateCreation) VALUES(2,2,'files/prescriptions/prescriptionDUPONTveronique.jpg','jpg','2020-12-22');
+INSERT INTO Document (idPatient,typeDocument,filePath, urlFormat, dateCreation) VALUES(2,2,'files/prescriptions/prescriptionDUPONTveronique1.jpg','jpg','2020-12-22');
 
-INSERT INTO Document (idPatient,typeDocument,filePath, urlFormat, dateCreation) VALUES(2,3,'files/carteIdentites/idDUPONTveronique.jpg','jpg','2020-12-22');
-INSERT INTO Document (idPatient,typeDocument,filePath, urlFormat, dateCreation) VALUES(3,3,'files/carteIdentites/idDUPONTjean.jpg','jpg','2020-10-15');
+INSERT INTO Document (idPatient,typeDocument,filePath, urlFormat, dateCreation) VALUES(2,3,'files/cartesIdentites/idDUPONTveronique.jpg','jpg','2020-12-22');
+INSERT INTO Document (idPatient,typeDocument,filePath, urlFormat, dateCreation) VALUES(3,3,'files/cartesIdentites/idDUPONTjean.jpg','jpg','2020-10-15');
 
 

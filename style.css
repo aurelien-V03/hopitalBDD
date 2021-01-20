@@ -1,3 +1,6 @@
+body{
+  font-family: 'Raleway',sans-serif;
+}
 input[type=text], select {
     width: 50%;
     padding: 12px 20px;
@@ -49,12 +52,7 @@ input[type=date], select {
     position: absolute;
     left: 350px;
   }
-  .h1{
-    text-align:center;
-    top: 60px;
-    left: 347px;
-    color: #4f95a7;
-  }
+  .h1 { color: rgb(134, 80, 134); font-family: 'Raleway',sans-serif; font-size: 32px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-align: center; text-transform: uppercase; }
 
 
 

@@ -1,6 +1,16 @@
 <?php
     // Un exemple d'url que cette page recevra
     $fileUrl = $_GET["urlDocument"];
+
+    // affiche image ou pdf
+    $doc_url_array = explode(".",$fileUrl);
+    $extension_img = $doc_url_array[count($doc_url_array)-1];
+
+    $img_to_display ="";
+    if($extension_img == "pdf")
+        $img_to_display = "<iframe src='".$fileUrl."' style='width:600px; height:500px; margin:auto; display:block;' frameborder='0'></iframe>";
+    else
+        $img_to_display = "<img id='doc_img' onclick='displayDocument()' src='".$fileUrl."'/>";
 ?>
 
 <!DOCTYPE html>
@@ -100,8 +110,12 @@
         <div style="text-align:center">
           <h2>Document</h2>
         </div>
-        <img id="doc_img" onclick="displayDocument()" src="<?php echo $fileUrl ?>"/>
-  
+        
+        <!-- Affichage de l'image ou du pdf-->
+        <?php 
+          echo $img_to_display;
+        ?>
+
         <!-- Formulaire envoi email-->
         <div id="divFormEmail">
               <form action="" method="POST" id="formEmail">

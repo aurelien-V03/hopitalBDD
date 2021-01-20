@@ -47,15 +47,6 @@ if(isset($_POST["submit"]) && !empty($_POST["typeDocument"])) {
   // extension du fichier à upload
   $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
-  // Check if image file is a actual image or fake image
-    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-    if($check !== false) {
-      echo "File is an image - " . $check["mime"] . ".";
-      $uploadOk = 1;
-    } else {
-      echo "File is not an image.";
-      $uploadOk = 0;
-    }
     // Check if file already exists
     if (file_exists($target_file)) {
       echo "Sorry, file already exists.";
@@ -112,6 +103,11 @@ if(isset($_POST["submit"]) && !empty($_POST["typeDocument"])) {
     <title>title</title>
     <link rel="stylesheet" href="style.css">
     <style>
+    #buttonUpload{
+      width:100%;
+      padding: 10px;
+    }
+    
     </style>
   </head>
   <body>
@@ -155,6 +151,7 @@ if(isset($_POST["submit"]) && !empty($_POST["typeDocument"])) {
         <!-- Formulaire d'upload -->
         <h2 style="text-align:center">Upload document</h2>
         <div style="width:40%; margin:auto">
+
         <form action="" method="post" enctype="multipart/form-data">
           <input type="file" name="fileToUpload" class="inputfile" style="display:block">
             <select name="typeDocument" style="display:block">
@@ -163,8 +160,9 @@ if(isset($_POST["submit"]) && !empty($_POST["typeDocument"])) {
                 <option value="prescription">prescription</option>
                 <option value="cartesIdentite">carte identite</option>
             </select>
-            <input type="submit" value="Upload Image" name="submit">
+            <input id="buttonUpload" type="submit" value="Upload Image" name="submit">
          </form>
+
         </div>
         
     <!-- Bouton retour -->
