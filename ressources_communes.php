@@ -74,15 +74,22 @@ class Document{
 
 
 
-    // prend en parametre l'id du patient et lui revoie un tableau contenant 1 tableau pour chaque type de document (ordonnance, prescription, cartes identites)
-    function getPatientDocuments($patientId){
+    // prend en parametre un array d'id du patient et lui revoie un tableau contenant 1 tableau pour chaque type de document (ordonnance, prescription, cartes identites)
+    function getPatientDocuments($patientId, $list_filter){
         $array_document = array(
             "Ordonnance" => array(),
             "Prescription" => array(),
             "Carte identite" => array()
         );
 
-        $requete = "SELECT idDocument, idPatient, typeDocument, filePath, urlFormat, dateCreation, td.libelle FROM document d, typeDocument td WHERE d.typeDocument = td.idTypeDocument AND idPatient = " .$patientId;
+        foreach($patientId as $id)
+        {
+             $requete = "SELECT idDocument, idPatient, typeDocument, filePath, urlFormat, dateCreation, td.libelle FROM document d, typeDocument td WHERE d.typeDocument = td.idTypeDocument AND idPatient = " .$id;
+
+            foreach($list_filter as $key => $value)
+            {
+                $requete .= ' AND '. $key . " = " . $value;
+            }
 
         $requestDocuments = getMysqlConnection()->prepare($requete);
         $requestDocuments->execute();
@@ -107,6 +114,8 @@ class Document{
                      break;
             }
         }
+
+    }
         return $array_document;
     }
    

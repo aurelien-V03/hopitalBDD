@@ -29,7 +29,7 @@
         "Motif de derniere visite" => $row["motifLibelle"]
       );
 
-      $arrayDocument =  getPatientDocuments($codePatient);
+      $arrayDocument =  getPatientDocuments(array($codePatient), array());
   }
  
   //
@@ -104,22 +104,9 @@ if(isset($_POST["submit"]) && !empty($_POST["typeDocument"])) {
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="style.css">
-    <script>
-
-      // function AJAX pour supprimer un document 
-      function deleteDoc(numDocToDelete){
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function() {
-          console.log(xmlhttp.readyState);
-          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            alert("Document N° " + numDocToDelete + " supprimé ");
-            // refresh la page après 1 secondes
-            setTimeout(function(){ document.location.reload();}, 1000);
-          }
-        };
-        xmlhttp.open("GET", "deleteDocument.php?numDocDelete=" + numDocToDelete, true);
-        xmlhttp.send();
-      }
+    <script src="ajax.js">
+    
+     
     
     </script>
     <style>

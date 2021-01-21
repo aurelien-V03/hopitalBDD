@@ -10,11 +10,11 @@
 
     /* Recuperer la liste des motifs d'admission pour la liste deroulante des motifs */
     $list_motifs = array("Indifferent" => "Indifferent");
-
     $requete_motif = "SELECT Code, libellé FROM motifs";
     $request_motif = getMysqlConnection()->prepare($requete_motif);
     $request_motif->execute();
-    
+    $arrayDocument = array();
+
     while($row = $request_motif->fetch()){
       $list_motifs[$row["Code"]] =  $row["libellé"];
     }
@@ -39,7 +39,7 @@
 
     /*
     ================================================================================================
-                                               FORMULAIRE
+                                               FORMULAIRE : LISTE PATIENTS
     ================================================================================================
     */
     
@@ -89,15 +89,49 @@
       $errorSubmit = true;
     }
 
+
+    /*
+    ================================================================================================
+                                               FORMULAIRE : LISTE DOCUMENTS PATIENTS
+    ================================================================================================
+    */
+
+    if(isset($_POST["displayAllDocuments"]))
+    {
+      $list_code_client = array(); // liste des code des patients
+      $list_filter_doc = array(); // liste des filtres a appliquer sur les documents
+
+      // On ne garde que les documents au format
+      if($_POST["filtreDocFormat"] != "Indifferent")
+            $list_filter_doc["urlFormat"] =  "'".$_POST["filtreDocFormat"]."'" ;
+     if($_POST["filtreDocType"] != "Indifferent")
+        $list_filter_doc["typeDocument"] =  $_POST["filtreDocType"] ;
+
+      //on recupere chaque contrainte
+      $requete_code_patient = "select Code from patients"; //requete pour recuperer les id des patients
+      $request_code_patient = getMysqlConnection()->prepare($requete_code_patient);
+      $request_code_patient->execute();
+      // on recupere chaque code patient
+      while($row = $request_code_patient->fetch()){
+       array_push($list_code_client, $row["Code"]);
+      }
+
+
+      $arrayDocument =  getPatientDocuments($list_code_client, $list_filter_doc);
+
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <title>Hopital</title>
-    <link rel="stylesheet" href="style.css">
+     <!-- librairie CDN pour les icones -->
+     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="style.css">
     <style>
-        #divcodemotif, #divcodepays, #datenaissance{
+        #divcodemotif, #divcodepays, #datenaissance, #divFormatDoc, #divTypeDoc{
           width:50%;
           margin:auto;
         }
@@ -108,14 +142,18 @@
         #titleResultRecherche{
           text-align:center;
         }
-
+        #formDoc,#formPatient{
+          margin:50px;
+        }
+       
   </style>
+  <script src="ajax.js"></script>
   </head>
   <body>
-     <h1 class="h1">Recherche de patients</h1>
+     <h1 class="h1">Gestion électronique des documents patients</h1>
 
-     <!-- Formulaire  -->
-    <form method="POST" action="recherche_patient.php" name="vform" align="center">
+     <!-- Formulaire pour la recherche des patients  -->
+    <form method="POST" action="recherche_patient.php" name="vform" align="center" id="formPatient">
 
       <div id="nom">
         <label>Nom</label> <br>
@@ -158,7 +196,7 @@
           </select>
         </div>
       <div>
-      <input type="submit" name="submit" value="envoyer" class="btn">
+      <input type="submit" name="submit" value="Obtenir la liste des patients" class="btn">
       </div>
    </form>
 
@@ -175,5 +213,52 @@
         if(!empty($_POST["submit"]))
            echo $table_patients;
     ?>
+
+    <!-- Formulaie pour obtenir la liste des documents -->
+    <form action="" method="POST" style="text-align:center" id="formDoc">
+
+      <!-- Selection du format (png, pdf, jpg) -->
+      <div id="divFormatDoc">
+        <label for="docFormat">Format du document</label><br/>
+        <select name="filtreDocFormat" placeholder="Indifférent" id="docFormat">
+              <option value="Indifferent">Indifferent</option>
+              <option value="png">png</option>
+              <option value="jpg">jpg</option>
+              <option value="pdf">pdf</option>
+        </select>
+      </div>
+
+      <!-- Selection du type de doc (ordonnance, prescription...) -->
+      <div id="divTypeDoc">
+        <label for="docType">Type du document</label><br/>
+        <select name="filtreDocType" placeholder="Indifférent" id="docType">
+              <option value="Indifferent">Indifferent</option>
+              <option value="1">Ordonnance</option>
+              <option value="2">Prescription</option>
+              <option value="3">Carte identite</option>
+        </select>
+        </div>
+        <input  type="submit" name="displayAllDocuments" value="Obtenir la liste de tous les documents patients"/>
+    </form>
+
+
+ <!-- Affichage des documents des patient -->
+ <?php 
+    if(count($arrayDocument) > 0){
+    $table_document = '<h2 style="text-align:center">Historique des documents</h2>';
+    $table_document .=  '<table class="tableInformation"><tbody><tr><th>Nom fichier</th><th>Date creation</th><th>Type document</th></tr>';
+      // Pour chaque categorie de document
+      foreach ($arrayDocument as  $key => $documentType) {
+        $documentHTML =  "";
+        // Pour chaque document de cette categorie
+        foreach($documentType as $doc)
+        {                 
+          $table_document .= "<tr>".$doc->getRowTable()."</tr>";
+        }
+    }
+    $table_document.=  '</tbody></table>';
+    echo $table_document;
+  }
+ ?>
   </body>
 </html>
