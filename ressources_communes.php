@@ -22,6 +22,7 @@ class Document{
         $row = "<td><a href='document_affichage.php?urlDocument=".$this->filePath."'>".$this->getNameOfFile()."</a></td>";
         $row .= "<td>".$this->dateCreation."</td>";
         $row .= "<td>".$this->libelle."</td>";
+        $row .= "<td     <i onclick='deleteDoc(".$this->id.")' class='fa fa-trash'></i></td>";
         return $row;
     }
 

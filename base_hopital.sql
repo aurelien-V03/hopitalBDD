@@ -9,7 +9,7 @@ CREATE DATABASE IF NOT EXISTS hopital_php;
 USE hopital_php;
 
 -- Ajout d'un utilisateur avec tous les droits
-CREATE USER 'user1'@'localhost' IDENTIFIED BY 'hcetylop';
+CREATE USER IF NOT EXISTS 'user1'@'localhost' IDENTIFIED BY 'hcetylop';
 GRANT ALL PRIVILEGES ON * . * TO 'user1'@'localhost';
 
 DROP TABLE IF EXISTS Document;

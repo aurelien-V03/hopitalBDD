@@ -24,7 +24,7 @@
         width:500px;
         margin:auto;
         display:block;
-        border:2px black solid;
+        border:1px black solid;
         border-radius:5px;
       }
 
@@ -49,7 +49,7 @@
         width:30%;
         margin:auto;
         margin-top:30px;
-          border:2px grey solid;
+          border:1px grey solid;
           padding:10px 85px;
           border-radius:5px;
       }
@@ -109,6 +109,7 @@
         <!-- Affichage complet d'un document du patient (ordonnance, prescription, carte identite) -->
         <div style="text-align:center">
           <h2>Document</h2>
+          <h4><?php echo $fileUrl; ?></h4>
         </div>
         
         <!-- Affichage de l'image ou du pdf-->

@@ -31,7 +31,6 @@
 
       $arrayDocument =  getPatientDocuments($codePatient);
   }
-
  
   //
   //          formulaire d'upload validé
@@ -101,7 +100,28 @@ if(isset($_POST["submit"]) && !empty($_POST["typeDocument"])) {
   <head>
     <meta charset="utf-8">
     <title>title</title>
+    <!-- librairie CDN pour les icones -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="style.css">
+    <script>
+
+      // function AJAX pour supprimer un document 
+      function deleteDoc(numDocToDelete){
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+          console.log(xmlhttp.readyState);
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            alert("Document N° " + numDocToDelete + " supprimé ");
+            // refresh la page après 1 secondes
+            setTimeout(function(){ document.location.reload();}, 1000);
+          }
+        };
+        xmlhttp.open("GET", "deleteDocument.php?numDocDelete=" + numDocToDelete, true);
+        xmlhttp.send();
+      }
+    
+    </script>
     <style>
     #buttonUpload{
       width:100%;
